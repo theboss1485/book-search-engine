@@ -1,37 +1,64 @@
 const {Book, User} = require('../models');
-import Auth from '../utils/auth';
+import Auth, { signToken, Auth} from '../utils/auth';
 
 const resolvers = {
 
     Query: {
 
-        me: async (args) => {
+        me: async (parent, {id}) => {
 
-            return await User.find(args.id)
+            return await User.findOne({_id: id}).populate('books')
         }
     },
 
 
     Mutation: {
 
-        login: async ({username, email, password}) => {
+        login: async (parent, {email, password}) => {
 
-            return await Auth.find(arg)
+            let user = await User.findOne({email});
+
+            if(user){
+
+                let correctPassword = await user.isCorrectPassword(password)
+
+                if(correctPassword){
+
+                    let token = signToken(user);
+                    return {token, user}
+                
+                } else {
+
+                    throw new Auth.AuthenticationError
+                }
+                
+            } else {
+
+                throw new Auth.AuthenticationError
+            }
         },
 
-        addUser: async ({username, email, password}) => {
+        addUser: async (parent, args) => {
 
-
+            let user = await User.create({args})
+            return user;
         },
 
-        saveBook: async ({authors, description, title, bookId, image, link}) => {
+        saveBook: async (parent, args) => {
 
-            return await User.find()
+            let user = User.findOne({email: args.email})
+            let book = Book.create({input: args.input})
+            user.savedBooks.add(book);
+            return user;
         },
 
-        removeBook: async ({bookId}) => {
+        removeBook: async (parent, {bookId, email}) => {
 
-            return await User.find()
+            let user = User.findOne({email: args.email});
+            let book = Book.findOne({bookId: bookId})
+            user.savedBooks.remove(book);
+            return user;
+
         }
     }
 }

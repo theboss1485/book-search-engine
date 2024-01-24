@@ -32,7 +32,7 @@ const startApolloServer = async () => {
 
     app.use(routes);
 
-    app.use('/graphql', expressMiddleware(server));
+    app.use('/api', expressMiddleware(server));
 
     db.once('open', () => {
 

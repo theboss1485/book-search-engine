@@ -10,7 +10,7 @@ export default defineConfig({
         port: 3000,
         open: true,
         proxy: {
-            //TODO: Define graphql proxy.
+
             '/api': {
                 
                 target: 'http://localhost:3001',
