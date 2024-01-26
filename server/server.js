@@ -4,7 +4,8 @@ const path = require('path');
 const db = require('./config/connection');
 const { expressMiddleware } = require('@apollo/server/express4');
 const routes = require('./routes');
-const {typeDefs, resolvers} = require('./schemas')
+const {typeDefs, resolvers} = require('./schemas');
+const auth = require('./utils/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -19,7 +20,7 @@ const server = new ApolloServer({
 
 // I took code for this method from activity 14 of Module 21.
 const startApolloServer = async () => {
-
+  
     await server.start();
 
     app.use(express.urlencoded({ extended: false }));
@@ -30,13 +31,14 @@ const startApolloServer = async () => {
 
         app.use(express.static(path.join(__dirname, '../client/build')));
     }
+    
 
-    app.use(routes);
-
-    app.use('/api', expressMiddleware(server));
+    app.use('/graphql', expressMiddleware(server),
+        auth.authMiddleware
+    );
 
     db.once('open', () => {
-
+        console.log("Database Connected");
         app.listen(PORT, () => {
 
             console.log(`🌍 Now listening on localhost:${PORT}`)
