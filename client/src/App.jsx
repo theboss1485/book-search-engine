@@ -15,14 +15,14 @@ const authorizationLink = setContext((_, {headers}) => {
 
     const authorizationtoken = localStorage.getItem('id_token');
 
-        return {
+    return {
 
-            headers: {
-                
-                ...headers,
-                authorization: authorizationtoken ? `Bearer ${authorizationtoken}` : ''
-            }
+        headers: {
+            
+            ...headers,
+            authorization: authorizationtoken ? `Bearer ${authorizationtoken}` : ''
         }
+    }
     
 })
 

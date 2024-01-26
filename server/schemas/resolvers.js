@@ -52,6 +52,8 @@ const resolvers = {
 
         addUser: async (parent, {username, email, password}) => {
 
+            console.log("Data Recieved: ", username, email, password)
+
             try {
 
                 let user = await User.create({username, email, password})
