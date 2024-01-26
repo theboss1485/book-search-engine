@@ -1,3 +1,5 @@
+const { GraphQLError } = require('graphql');
+
 const jwt = require('jsonwebtoken');
 
 // set token secret and expiration date
@@ -5,6 +7,14 @@ const secret = 'mysecretsshhhhh';
 const expiration = '2h';
 
 module.exports = {
+
+    AuthenticationError: new GraphQLError("Error: Email or password is incorrect", {
+
+        extensions: {
+
+            code: 'AUTHENTICATIONERROR'
+        }
+    }),
 
     // function for our authenticated routes
     authMiddleware: function (req, res, next) {
