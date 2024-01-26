@@ -5,9 +5,21 @@ const resolvers = {
 
     Query: {
 
-        me: async (parent, {id}) => {
+        me: async (parent, context) => {
 
-            return await User.findOne({_id: id}).populate('books')
+            try {
+
+                if(context.user){
+
+                    let user = await User.findOne({email: context.user.email})
+
+                    return user
+                }
+
+            } catch (error) {
+                
+                console.log(error)
+            }
         }
     },
 
@@ -38,23 +50,34 @@ const resolvers = {
             }
         },
 
-        addUser: async (parent, args) => {
+        addUser: async (parent, {username, email, password}) => {
 
-            let user = await User.create({args})
-            return user;
+            try {
+
+                let user = await User.create({username, email, password})
+                const token = signToken(user)
+                return {token, user};
+            }
+
+            catch(error) {
+
+                console.log("User Creation Failed")
+            }
+
+            
         },
 
-        saveBook: async (parent, args) => {
+        saveBook: async (parent, args, context) => {
 
-            let user = User.findOne({email: args.email})
+            let user = User.findOne({_id: context.user.id})
             let book = Book.create({input: args.input})
             user.savedBooks.add(book);
             return user;
         },
 
-        removeBook: async (parent, {bookId, email}) => {
+        removeBook: async (parent, {bookId}, context) => {
 
-            let user = User.findOne({email: args.email});
+            let user = User.findOne({_id: context.user.id});
             let book = Book.findOne({bookId: bookId})
             user.savedBooks.remove(book);
             return user;
