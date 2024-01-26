@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import {
   Container,
   Card,
@@ -7,9 +7,8 @@ import {
   Col
 } from 'react-bootstrap';
 
-import { getMe, deleteBook } from '../utils/API';
-
-import GET_ME from '../utils/queries.js'
+import {GET_ME} from '../utils/queries.js'
+import {REMOVE_BOOK} from '../utils/mutations.js'
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
@@ -65,7 +64,9 @@ const SavedBooks = () => {
 
         try {
 
-            const response = await deleteBook(bookId, token);
+            const [removeBook, {error}] = useMutation(REMOVE_BOOK);
+
+            const response = await removeBook(bookId, token);
 
             if (!response.ok) {
                 throw new Error('something went wrong!');

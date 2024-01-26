@@ -3,8 +3,10 @@ import { Form, Button, Alert } from 'react-bootstrap';
 
 import { createUser } from '../utils/API';
 import Auth from '../utils/auth';
+import { ADD_USER } from '../utils/mutations';
 
 const SignupForm = () => {
+
     // set initial form state
     const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
 
@@ -21,6 +23,8 @@ const SignupForm = () => {
 
     const handleFormSubmit = async (event) => {
 
+        const [addUser, {error}] = useMutation(ADD_USER);
+
         event.preventDefault();
 
         // check if form has everything (as per react-bootstrap docs)
@@ -34,7 +38,7 @@ const SignupForm = () => {
 
         try {
 
-            const response = await createUser(userFormData);
+            const response = await addUser(userFormData);
 
             if (!response.ok) {
 

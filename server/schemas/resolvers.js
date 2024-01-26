@@ -1,5 +1,5 @@
 const {Book, User} = require('../models');
-import Auth, { signToken, Auth} from '../utils/auth';
+const { signToken, Auth} = require( '../utils/auth');
 
 const resolvers = {
 
