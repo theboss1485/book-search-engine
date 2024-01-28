@@ -103,6 +103,7 @@ const SearchBooks = () => {
         }
     };
 
+    // This function renders the form for searching for books.
     return (
         <>
             <div className="text-light bg-dark p-5">

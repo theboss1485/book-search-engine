@@ -21,6 +21,7 @@ const SavedBooks = () => {
     // use this to determine if `useEffect()` hook needs to run again
     const userDataLength = Object.keys(userData).length;
 
+        //This function gets user data for the purpose of getting a user's saved books. 
         const getUserData = async () => {
 
             try {
@@ -52,7 +53,7 @@ const SavedBooks = () => {
 
   
 
-    // create function that accepts the book's mongo _id value as param and deletes the book from the database
+    // This is a function that accepts the book's mongo _id value as param and deletes the book from the database
     const handleDeleteBook = async (bookId) => {
 
         const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -89,6 +90,7 @@ const SavedBooks = () => {
         return <h2>LOADING...</h2>;
     }
 
+    // This code renders the list of saved books.
     return (
         <>
             <div fluid className="text-light bg-dark p-5">

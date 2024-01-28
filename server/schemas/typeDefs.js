@@ -1,3 +1,5 @@
+/* This file contains the type definitions, or names and types of fields required and returned, when 
+querying the graphql database.*/
 const typeDefs = `
 
     input saveBookInput {
@@ -42,6 +44,7 @@ const typeDefs = `
 
         token: String
         user: User
-    }`
+    }
+`;
 
-    module.exports = typeDefs;
+module.exports = typeDefs;

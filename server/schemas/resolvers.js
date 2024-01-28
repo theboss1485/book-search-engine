@@ -1,10 +1,12 @@
 const {Book, User} = require('../models');
-const { signToken, Auth} = require( '../utils/auth');
+const { signToken, AuthenticationError} = require( '../utils/auth');
 
+// This file contains the logic to be executed whenever a graphql query or mutation is run.
 const resolvers = {
 
     Query: {
 
+        // This is the logic for the 'me' query, which obtains the logged in user's information.
         me: async (parent, context) => {
 
             try {
@@ -26,6 +28,7 @@ const resolvers = {
 
     Mutation: {
 
+        // The login mutation logs a user into the application.
         login: async (parent, {email, password}) => {
 
             let user = await User.findOne({email});
@@ -41,22 +44,26 @@ const resolvers = {
                 
                 } else {
 
-                    throw new Auth.AuthenticationError
+                    throw new AuthenticationError
                 }
                 
             } else {
 
-                throw new Auth.AuthenticationError
+                throw new AuthenticationError
             }
         },
 
+        // The addUser mutation adds a user to the database.
         addUser: async (parent, {username, email, password}) => {
+
+            console.log("test!!!!");
 
             console.log("Data Recieved: ", username, email, password)
 
             try {
 
-                let user = await User.create({username, email, password})
+                const user = await User.create({username, email, password});
+                console.log("User", user);
                 const token = signToken(user)
                 return {token, user};
             }
@@ -65,10 +72,9 @@ const resolvers = {
 
                 console.log("User Creation Failed")
             }
-
-            
         },
 
+        // The saveBook mutation saves a book to the database.
         saveBook: async (parent, args, context) => {
 
             let user = User.findOne({_id: context.user.id})
@@ -77,6 +83,7 @@ const resolvers = {
             return user;
         },
 
+        // The removeBook mutation removes a book from the database.
         removeBook: async (parent, {bookId}, context) => {
 
             let user = User.findOne({_id: context.user.id});

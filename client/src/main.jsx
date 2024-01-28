@@ -6,6 +6,7 @@ import App from './App.jsx'
 import SearchBooks from './pages/SearchBooks'
 import SavedBooks from './pages/SavedBooks'
 
+// This file sets up the browser router, which makes the application have multiple URLs.
 const router = createBrowserRouter([
     {
         path: '/',
