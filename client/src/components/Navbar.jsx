@@ -6,6 +6,7 @@ import LoginForm from './LoginForm';
 
 import Auth from '../utils/auth';
 
+// This function renders the navigation bar at the top of the screen.
 const AppNavbar = () => {
   // set modal display state
   const [showModal, setShowModal] = useState(false);

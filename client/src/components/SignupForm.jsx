@@ -5,11 +5,12 @@ import { createUser } from '../utils/API';
 import Auth from '../utils/auth';
 import { ADD_USER } from '../utils/mutations';
 
+// This form deals with signing up the user after he or she has entered his or her information.
 const SignupForm = () => {
 
     // set initial form state
     const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
-    const [addUser, {data, error}] = useMutation(ADD_USER);
+    const [addUser, { loading, error }] = useMutation(ADD_USER);
 
     // set state for form validation
     const [validated] = useState(false);
@@ -17,11 +18,13 @@ const SignupForm = () => {
     // set state for alert
     const [showAlert, setShowAlert] = useState(false);
 
+      // This function allows for the setting of form data when the user types a new character into the form.
         const handleInputChange = (event) => {
             const { name, value } = event.target;
             setUserFormData({ ...userFormData, [name]: value });
         };
 
+        // This function is executed when the user clicks the Submit button on the signup form.
     const handleFormSubmit = async (event) => {
 
 
@@ -38,20 +41,20 @@ const SignupForm = () => {
 
         try {
             console.log("Form Data: ", userFormData)
-            const response = await addUser(userFormData);
+            const {data} = await addUser({
 
-            if (!response.ok) {
+                variables:{...userFormData}
+            });
 
-                throw new Error('something went wrong!');
-            }
+            console.log("Response Data :", data);
 
-            const { token, user } = await response.json();
+            const { token, user } = data.addUser;
             console.log(user);
             Auth.login(token);
 
         } catch (err) {
 
-            console.error(err);
+            console.log(err);
             setShowAlert(true);
         }
 
@@ -63,6 +66,7 @@ const SignupForm = () => {
         });
     };
 
+    // This code renders the signup form.
     return (
         <>
             {/* This is needed for the validation functionality above */}
