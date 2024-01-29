@@ -10,7 +10,7 @@ const SignupForm = () => {
 
     // set initial form state
     const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
-    const [addUser, {data, error}] = useMutation(ADD_USER);
+    const [addUser, { loading, error }] = useMutation(ADD_USER);
 
     // set state for form validation
     const [validated] = useState(false);
@@ -46,7 +46,7 @@ const SignupForm = () => {
                 variables:{...userFormData}
             });
 
-            console.log(data);
+            console.log("Response Data :", data);
 
             const { token, user } = data.addUser;
             console.log(user);

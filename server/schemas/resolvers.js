@@ -30,25 +30,25 @@ const resolvers = {
 
         // The login mutation logs a user into the application.
         login: async (parent, {email, password}) => {
-
+            console.log("Incoming Request Data: ", email, password);
             let user = await User.findOne({email});
 
             if(user){
 
                 let correctPassword = await user.isCorrectPassword(password)
-
+                
                 if(correctPassword){
 
                     let token = signToken(user);
                     return {token, user}
-                
+                    
                 } else {
-
+                    
                     throw new AuthenticationError
                 }
                 
             } else {
-
+                
                 throw new AuthenticationError
             }
         },

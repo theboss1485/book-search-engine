@@ -36,7 +36,7 @@ module.exports = {
         if (!token) {
 
             console.log("Test222");
-
+            console.log("Req Obj in Auth: ", req)
             return req;
         }
 
@@ -58,7 +58,7 @@ module.exports = {
 
     // This function adds new data to the user's authorization token.
     signToken: function ({ username, email, _id }) {
-
+        console.log("signing token...")
         const payload = { username, email, _id };
         return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
     },

@@ -46,7 +46,7 @@ class AuthService {
 
     // This function logs the user in to the application by saving the user's token to local storage.
     login(idToken) {
-
+        console.log("Token ID: ", idToken)
         localStorage.setItem('id_token', idToken);
         window.location.assign('/');
     }
