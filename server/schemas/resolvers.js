@@ -71,7 +71,7 @@ const resolvers = {
 
             catch(error) {
 
-                console.log("User Creation Failed")
+                console.log(error)
             }
         },
 
