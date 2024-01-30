@@ -11,15 +11,9 @@ const resolvers = {
 
             try {
 
-                console.log("me test!");
-
                 if(context.user){
 
-                    console.log("context test");
-
                     let user = await User.findOne({_id: context.user._id})
-
-                    console.log("user", user)
                     return user
                 }
 
@@ -36,26 +30,34 @@ const resolvers = {
         // The login mutation logs a user into the application.
         login: async (parent, {email, password}) => {
 
-            let user = await User.findOne({email});
+            try{
 
-            if(user){
+                let user = await User.findOne({email});
 
-                let correctPassword = await user.isCorrectPassword(password)
+                if(user){
 
-                if(correctPassword){
+                    let correctPassword = await user.isCorrectPassword(password)
 
-                    let token = signToken(user);
-                    return {token, user}
+                    if(correctPassword){
+
+                        let token = signToken(user);
+                        return {token, user}
+                        
+                    } else {
+                        
+                        throw AuthenticationError
+                    }
                     
                 } else {
                     
-                    throw new AuthenticationError
+                    throw AuthenticationError
                 }
-                
-            } else {
-                
-                throw new AuthenticationError
+            
+            } catch (error){
+
+                console.log(error)
             }
+            
         },
 
         // The addUser mutation adds a user to the database.
@@ -64,7 +66,6 @@ const resolvers = {
             try {
 
                 const user = await User.create({username, email, password});
-                console.log("User", user);
                 const token = signToken(user)
                 return {token, user};
             }
@@ -81,23 +82,22 @@ const resolvers = {
             try{
 
                 if(context.user){
-                    console.log("user", context.user);
+
                     let user = await User.findOne({_id: context.user._id})
                     
     
                     user.savedBooks.push(bookToSave);
                     await user.save();
-                    console.log("user", user)
                     return user;
                 
                 } else {
     
                     throw new Error("User not logged in.")
                 }
+
             } catch (err){
 
                 console.log("Book Creation Failed.")
-                console.log(err)
             }
 
         },
@@ -107,19 +107,14 @@ const resolvers = {
 
             try{
 
-                console.log("user id", context.user._id);
-
                 let user = await User.findOne({_id: context.user._id});
-                console.log("user", user);
                 user.savedBooks = user.savedBooks.filter((book) => book.bookId !== bookId);
-                console.log("saved books", user.savedBooks);
                 await user.save();
                 return user;
             
             } catch (err){
 
                 console.log("Book Deletion Failed.")
-                console.log(JSON.stringify(err));
             }
 
             

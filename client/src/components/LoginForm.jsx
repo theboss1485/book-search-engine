@@ -26,10 +26,6 @@ const LoginForm = () => {
 
         event.preventDefault();
 
-        
-
-        
-
         // check if form has everything (as per react-bootstrap docs)
         const form = event.currentTarget;
 
@@ -47,18 +43,18 @@ const LoginForm = () => {
             });
 
         const { token, user } = data.login;
+
         if(user.savedBooks){
 
             const savedBookIds = user.savedBooks.map((book) => book.bookId);
             localStorage.setItem('saved_books', savedBookIds);
         }
         
-        console.log(user);
         Auth.login(token);
 
         } catch (err) {
 
-            console.error(err);
+            console.log("Something went wrong with your login credentials.");
             setShowAlert(true);
         }
 
@@ -78,8 +74,9 @@ const LoginForm = () => {
                     Something went wrong with your login credentials!
                 </Alert>
                 <Form.Group className='mb-3'>
-                    <Form.Label htmlFor='email'>Email</Form.Label>
+                    <Form.Label htmlFor='login-email'>Email</Form.Label>
                     <Form.Control
+                        id='login-email'
                         type='text'
                         placeholder='Your email'
                         name='email'
@@ -91,8 +88,9 @@ const LoginForm = () => {
                 </Form.Group>
 
                 <Form.Group className='mb-3'>
-                    <Form.Label htmlFor='password'>Password</Form.Label>
+                    <Form.Label htmlFor='login-password'>Password</Form.Label>
                     <Form.Control
+                        id='login-password'
                         type='password'
                         placeholder='Your password'
                         name='password'

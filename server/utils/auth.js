@@ -18,7 +18,6 @@ module.exports = {
     }),
 
     // function for our authenticated routes
-   // authMiddleware: function (req)
    //This function authenticates the user's authorization token.
     authMiddleware: function ({ req }) {
 
@@ -32,7 +31,6 @@ module.exports = {
         }
 
         if (!token) {
-            console.log("no token");
 
             return req;
         }
@@ -49,14 +47,12 @@ module.exports = {
             console.log('Invalid token');
         }
 
-        // send to next endpoint
-        //next();
         return req;
     },
 
     // This function adds new data to the user's authorization token.
     signToken: function ({ username, email, _id }) {
-        console.log("signing token...")
+
         const payload = { username, email, _id };
         return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
     },
