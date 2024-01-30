@@ -1,6 +1,8 @@
 // This file sets up the connection to the mongoose database.
+require('dotenv').config()
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/googlebooks');
+console.log(process.env)
+mongoose.connect(process.env.MONGODB_URI || process.env.LOCALHOST_DB_CONNECTION);
 
 module.exports = mongoose.connection;
