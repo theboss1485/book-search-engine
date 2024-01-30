@@ -78,33 +78,51 @@ const resolvers = {
         // The saveBook mutation saves a book to the database.
         saveBook: async (parent, {bookToSave}, context) => {
 
-            if(context.user){
-                console.log("book", bookToSave)
-                let user = await User.findOne({_id: context.user._id})
+            try{
+
+                if(context.user){
+                    console.log("user", context.user);
+                    let user = await User.findOne({_id: context.user._id})
+                    
+    
+                    user.savedBooks.push(bookToSave);
+                    await user.save();
+                    console.log("user", user)
+                    return user;
                 
+                } else {
+    
+                    throw new Error("User not logged in.")
+                }
+            } catch (err){
 
-                user.savedBooks.push(bookToSave);
-                await user.save();
-                console.log("user", user)
-                return user;
-            
-            } else {
-
-                throw new Error("User not logged in.")
+                console.log("Book Creation Failed.")
+                console.log(err)
             }
-
-            
 
         },
 
         // The removeBook mutation removes a book from the database.
         removeBook: async (parent, {bookId}, context) => {
 
-            let user = await User.findOne({_id: context.user.id});
-            let book = await Book.findOne({bookId: bookId})
-            user.savedBooks.remove(book);
-            await user.save();
-            return user;
+            try{
+
+                console.log("user id", context.user._id);
+
+                let user = await User.findOne({_id: context.user._id});
+                console.log("user", user);
+                user.savedBooks = user.savedBooks.filter((book) => book.bookId !== bookId);
+                console.log("saved books", user.savedBooks);
+                await user.save();
+                return user;
+            
+            } catch (err){
+
+                console.log("Book Deletion Failed.")
+                console.log(JSON.stringify(err));
+            }
+
+            
 
         }
     }

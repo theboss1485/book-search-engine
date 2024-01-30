@@ -2,16 +2,19 @@
     {
         "username": "GMorrow1234",
         "email": "gmorrow1234@gmail.com",
-        "password": "123456"
+        "password": "123456",
+        "savedBooks": []
     },
     {
         "username": "JMorrow5678",
         "email": "jmorrow5678@gmail.com",
-        "password": "234567"
+        "password": "234567",
+        "savedBooks": []
     },
     {
         "username": "NMorrow1234",
         "email": "nmorrow1234@gmail.com",
-        "password": "345678"
+        "password": "345678",
+        "savedBooks": []
     }
 ]
