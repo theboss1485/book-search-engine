@@ -7,14 +7,19 @@ const resolvers = {
     Query: {
 
         // This is the logic for the 'me' query, which obtains the logged in user's information.
-        me: async (parent, context) => {
+        me: async (parent, args, context) => {
 
             try {
 
+                console.log("me test!");
+
                 if(context.user){
 
-                    let user = await User.findOne({email: context.user.email})
+                    console.log("context test");
 
+                    let user = await User.findOne({_id: context.user._id})
+
+                    console.log("user", user)
                     return user
                 }
 
@@ -30,13 +35,13 @@ const resolvers = {
 
         // The login mutation logs a user into the application.
         login: async (parent, {email, password}) => {
-            console.log("Incoming Request Data: ", email, password);
+
             let user = await User.findOne({email});
 
             if(user){
 
                 let correctPassword = await user.isCorrectPassword(password)
-                
+
                 if(correctPassword){
 
                     let token = signToken(user);
@@ -56,10 +61,6 @@ const resolvers = {
         // The addUser mutation adds a user to the database.
         addUser: async (parent, {username, email, password}) => {
 
-            console.log("test!!!!");
-
-            console.log("Data Recieved: ", username, email, password)
-
             try {
 
                 const user = await User.create({username, email, password});
@@ -70,27 +71,61 @@ const resolvers = {
 
             catch(error) {
 
-                console.log("User Creation Failed")
+                console.log(error)
             }
         },
 
         // The saveBook mutation saves a book to the database.
-        saveBook: async (parent, args, context) => {
+        saveBook: async (parent, {bookToSave}, context) => {
 
-            let user = User.findOne({_id: context.user.id})
-            let book = Book.create({input: args.input})
-            user.savedBooks.add(book);
-            return user;
+            try{
+
+                if(context.user){
+                    console.log("user", context.user);
+                    let user = await User.findOne({_id: context.user._id})
+                    
+    
+                    user.savedBooks.push(bookToSave);
+                    await user.save();
+                    console.log("user", user)
+                    return user;
+                
+                } else {
+    
+                    throw new Error("User not logged in.")
+                }
+            } catch (err){
+
+                console.log("Book Creation Failed.")
+                console.log(err)
+            }
+
         },
 
         // The removeBook mutation removes a book from the database.
         removeBook: async (parent, {bookId}, context) => {
 
-            let user = User.findOne({_id: context.user.id});
-            let book = Book.findOne({bookId: bookId})
-            user.savedBooks.remove(book);
-            return user;
+            try{
+
+                console.log("user id", context.user._id);
+
+                let user = await User.findOne({_id: context.user._id});
+                console.log("user", user);
+                user.savedBooks = user.savedBooks.filter((book) => book.bookId !== bookId);
+                console.log("saved books", user.savedBooks);
+                await user.save();
+                return user;
+            
+            } catch (err){
+
+                console.log("Book Deletion Failed.")
+                console.log(JSON.stringify(err));
+            }
+
+            
 
         }
     }
 }
+
+module.exports = resolvers;

@@ -1,4 +1,6 @@
-import { useState} from 'react';
+import { useState, useEffect} from 'react';
+import { useQuery, useReadQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import {
   Container,
   Card,
@@ -14,42 +16,48 @@ import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
 
-    const [getMe, {error}] = useQuery(GET_ME);
+    const {loading, data} = useQuery(GET_ME);
+    const [removeBook, {error}] = useMutation(REMOVE_BOOK);
 
-    const [userData, setUserData] = useState({});
+    //const userDataLength = Object.keys(data).length;
+
+    const [userData, setUserData] = useState();
+
+    useEffect(() => {
+
+        console.log("data", data);
+
+        if(data){
+            setUserData(data.me)
+        }
+    }, [data])
 
     // use this to determine if `useEffect()` hook needs to run again
-    const userDataLength = Object.keys(userData).length;
+    //const userDataLength = Object.keys(userData).length;
 
         //This function gets user data for the purpose of getting a user's saved books. 
-        const getUserData = async () => {
+    //     const getUserData = async () => {
 
-            try {
+    //         try {
 
-                const token = Auth.loggedIn() ? Auth.getToken() : null;
+    //             const token = Auth.loggedIn() ? Auth.getToken() : null;
 
-                if (!token) {
+    //             if (!token) {
 
-                    return false;
-                }
+    //                 return false;
+    //             }
 
-                const response = await getMe(token);
-
-                if (!response.ok) {
-
-                    throw new Error('something went wrong!');
-                }
-
-                const user = await response.json();
-                setUserData(user);
-
-            } catch (err) {
+    //             const user = data?.user || {};
                 
-                console.error(err);
-            }
-        };
+    //             setUserData(user);
 
-    getUserData();
+    //         } catch (err) {
+                
+    //             console.error(err);
+    //         }
+    //     };
+
+    // getUserData();
 
   
 
@@ -65,16 +73,19 @@ const SavedBooks = () => {
 
         try {
 
-            const [removeBook, {error}] = useMutation(REMOVE_BOOK);
+            //const response = await removeBook(bookId, token);
 
-            const response = await removeBook(bookId, token);
+            const {data} = await removeBook({
 
-            if (!response.ok) {
-                throw new Error('something went wrong!');
-            }
+                variables:{
+                    
+                    bookId: bookId,
+                    token: token
+                }
+            });
 
-            const updatedUser = await response.json();
-            setUserData(updatedUser);
+            const user = data.removeBook
+            setUserData(user);
 
             // upon success, remove book's id from localStorage
             removeBookId(bookId);
@@ -85,15 +96,22 @@ const SavedBooks = () => {
     };
 
     // if data isn't here yet, say so
-    if (!userDataLength) {
+    // if ((loading)) {
 
-        return <h2>LOADING...</h2>;
-    }
+    //     console.log("loading test");
+        
+    
+    // } else {
 
-    // This code renders the list of saved books.
-    return (
+    //     setUserData(data.me);
+    //     console.log(userData);
+    // }
+
+    console.log("user data", userData);
+
+    return (userData ? 
         <>
-            <div fluid className="text-light bg-dark p-5">
+            <div fluid="true" className="text-light bg-dark p-5">
                 <Container>
                     <h1>Viewing saved books!</h1>
                 </Container>
@@ -108,8 +126,8 @@ const SavedBooks = () => {
                 <Row>
                     {userData.savedBooks.map((book) => {
                         return (
-                        <Col md="4">
-                            <Card key={book.bookId} border='dark'>
+                        <Col key={book.bookId} md="4">
+                            <Card border='dark'>
                                 {book.image ? <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' /> : null}
                                 <Card.Body>
                                     <Card.Title>{book.title}</Card.Title>
@@ -126,7 +144,10 @@ const SavedBooks = () => {
                 </Row>
             </Container>
         </>
-    );
+    : null);
+
+    // This code renders the list of saved books.
+    
 };
 
 export default SavedBooks;
