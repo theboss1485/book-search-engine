@@ -8,6 +8,7 @@ import SavedBooks from './pages/SavedBooks'
 
 // This file sets up the browser router, which makes the application have multiple URLs.
 const router = createBrowserRouter([
+
     {
         path: '/',
         element: <App />,
@@ -17,7 +18,9 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <SearchBooks />
+
             }, {
+                
                 path: '/saved',
                 element: <SavedBooks />
             }

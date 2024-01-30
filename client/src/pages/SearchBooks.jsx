@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap';
 
 import Auth from '../utils/auth';
-import { saveBook, searchGoogleBooks } from '../utils/API';
+import {searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 import { SAVE_BOOK } from '../utils/mutations';
 
@@ -67,7 +67,7 @@ const SearchBooks = () => {
 
         } catch (err) {
 
-            console.error(err);
+            console.log("Something went wrong with book searching.");
         }
     };
 
@@ -96,7 +96,7 @@ const SearchBooks = () => {
 
         } catch (err) {
 
-            console.error(JSON.stringify(err));
+            console.log("Something went wrong with saving the book.");
         }
     };
 

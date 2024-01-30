@@ -2,7 +2,13 @@
 require('dotenv').config()
 const mongoose = require('mongoose');
 
-console.log(process.env)
-mongoose.connect(process.env.MONGODB_URI || process.env.LOCALHOST_DB_CONNECTION);
+let atlastConnectionString = undefined
+
+if(process.env.MONGODB_URI){
+
+    atlastConnectionString = encodeURI(process.env.MONGODB_URI)
+}
+
+mongoose.connect(atlastConnectionString || process.env.LOCALHOST_DB_CONNECTION);
 
 module.exports = mongoose.connection;

@@ -1,7 +1,7 @@
 
 /* I took the code for adding the ApolloProvider component from activity 24 of module 21.
- This file sets up the authorization link for usage of the token, and the HTTP link for usage of GraphQL.
- It also sets up the apollo client and renders the overall page.*/
+This file sets up the authorization link for usage of the token, and the HTTP link for usage of GraphQL.
+It also sets up the apollo client and renders the overall page.*/
 import './App.css';
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
@@ -13,6 +13,7 @@ const httpLink = createHttpLink({
 
     uri: '/graphql'
 });
+
 const authorizationLink = setContext((_, {headers}) => {
 
     const authorizationtoken = localStorage.getItem('id_token');

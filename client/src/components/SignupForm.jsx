@@ -45,15 +45,12 @@ const SignupForm = () => {
                 variables:{...userFormData}
             });
 
-            console.log("Response Data :", data);
-
             const { token, user } = data.addUser;
-            console.log(user);
             Auth.login(token);
 
         } catch (err) {
 
-            console.log(err);
+            console.log("something went wrong with your signup process.  Please try a different username and password.");
             setShowAlert(true);
         }
 
@@ -79,6 +76,7 @@ const SignupForm = () => {
                 <Form.Group className='mb-3'>
                     <Form.Label htmlFor='username'>Username</Form.Label>
                     <Form.Control
+                        id='username'
                         type='text'
                         placeholder='Your username'
                         name='username'
@@ -90,8 +88,9 @@ const SignupForm = () => {
                 </Form.Group>
 
                 <Form.Group className='mb-3'>
-                    <Form.Label htmlFor='email'>Email</Form.Label>
+                    <Form.Label htmlFor='signup-email'>Email</Form.Label>
                     <Form.Control
+                        id='signup-email'
                         type='email'
                         placeholder='Your email address'
                         name='email'
@@ -103,8 +102,9 @@ const SignupForm = () => {
                 </Form.Group>
 
                 <Form.Group className='mb-3'>
-                    <Form.Label htmlFor='password'>Password</Form.Label>
+                    <Form.Label htmlFor='signup-password'>Password</Form.Label>
                     <Form.Control
+                        id='signup-password'
                         type='password'
                         placeholder='Your password'
                         name='password'
