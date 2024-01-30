@@ -14,6 +14,8 @@ import {REMOVE_BOOK} from '../utils/mutations.js'
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
+import { viewBookOnGoogleBooks } from '../utils/viewBookOnGoogleBooks';
+
 const SavedBooks = () => {
 
     const {loading, data} = useQuery(GET_ME);
@@ -86,9 +88,14 @@ const SavedBooks = () => {
                                     <Card.Title>{book.title}</Card.Title>
                                     <p className='small'>Authors: {book.authors}</p>
                                     <Card.Text>{book.description}</Card.Text>
-                                    <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
-                                        Delete this Book!
-                                    </Button>
+                                    <div className="d-flex flex-column justify-content-center">
+                                        <Button className="btn-block btn-success mb-3"onClick={() => viewBookOnGoogleBooks(book.link)}>
+                                                View on Google Books
+                                        </Button>
+                                        <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
+                                            Delete this Book!
+                                        </Button>
+                                    </div>
                                 </Card.Body>
                             </Card>
                         </Col>

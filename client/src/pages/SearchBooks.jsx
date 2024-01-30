@@ -14,6 +14,8 @@ import {searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 import { SAVE_BOOK } from '../utils/mutations';
 
+import { viewBookOnGoogleBooks } from '../utils/viewBookOnGoogleBooks';
+
 const SearchBooks = () => {
 
     // create state for holding returned google api data
@@ -60,6 +62,7 @@ const SearchBooks = () => {
                 title: book.volumeInfo.title,
                 description: book.volumeInfo.description,
                 image: book.volumeInfo.imageLinks?.thumbnail || '',
+                link: book.volumeInfo.previewLink
             }));
 
             setSearchedBooks(bookData);
@@ -120,7 +123,7 @@ const SearchBooks = () => {
                             </Col>
                             <Col xs={12} md={4}>
                                 <Button type='submit' variant='success' size='lg'>
-                                Submit Search
+                                    Submit Search
                                 </Button>
                             </Col>
                         </Row>
@@ -146,16 +149,21 @@ const SearchBooks = () => {
                                         <Card.Title>{book.title}</Card.Title>
                                             <p className='small'>Authors: {book.authors}</p>
                                         <Card.Text>{book.description}</Card.Text>
-                                        {Auth.loggedIn() && (
-                                        <Button
-                                            disabled={savedBookIds?.some((savedBookId) => savedBookId === book.bookId)}
-                                            className='btn-block btn-info'
-                                            onClick={() => handleSaveBook(book.bookId)}>
-                                            {savedBookIds?.some((savedBookId) => savedBookId === book.bookId)
-                                            ? 'This book has already been saved!'
-                                            : 'Save this Book!'}
-                                        </Button>
-                                        )}
+                                        <div className="d-flex flex-column justify-content-center">
+                                            <Button className="btn-block btn-success mb-3"onClick={() => viewBookOnGoogleBooks(book.link)}>
+                                                View on Google Books
+                                            </Button>
+                                            {Auth.loggedIn() && (
+                                                <Button
+                                                    disabled={savedBookIds?.some((savedBookId) => savedBookId === book.bookId)}
+                                                    className='btn-block btn-info'
+                                                    onClick={() => handleSaveBook(book.bookId)}>
+                                                    {savedBookIds?.some((savedBookId) => savedBookId === book.bookId)
+                                                    ? 'This book has already been saved!'
+                                                    : 'Save this Book!'}
+                                                </Button>
+                                            )}
+                                        </div>
                                     </Card.Body>
                                 </Card>
                             </Col>
