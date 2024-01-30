@@ -30,12 +30,20 @@ export const ADD_USER = gql`
 // This is the definition of the mutation to save a book to the database.
 export const SAVE_BOOK = gql`
 
-    mutation saveBook($input: saveBookInput!){
+    mutation saveBook($bookToSave: BookInput!){
         
-        saveBook(input: $input) {
+        saveBook(bookToSave: $bookToSave) {
 
-            user{
-                savedBooks
+            _id
+            email
+            username
+            savedBooks {
+                bookId
+                authors
+                description
+                title
+                image
+                link
             }
         }
     }
@@ -48,8 +56,16 @@ export const REMOVE_BOOK = gql`
 
         removeBook(bookId: $bookId) {
             
-            user{
-                savedBooks
+            _id
+            email
+            username
+            savedBooks {
+                bookId
+                authors
+                description
+                title
+                image
+                link
             }
         }
     }

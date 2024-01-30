@@ -1,5 +1,6 @@
 // see SignupForm.js for comments
 import { useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { Form, Button, Alert } from 'react-bootstrap';
 
 import { LOGIN_USER } from '../utils/mutations';
@@ -10,6 +11,7 @@ const LoginForm = () => {
 
     const [userFormData, setUserFormData] = useState({ email: '', password: '' });
     const [validated] = useState(false);
+    const [loginUser, {error}] = useMutation(LOGIN_USER);
     const [showAlert, setShowAlert] = useState(false);
 
     // This function allows for the setting of form data when the user types a new character into the form.
@@ -22,9 +24,11 @@ const LoginForm = () => {
     // This function is executed when the user clicks the Submit button on the login form.
     const handleFormSubmit = async (event) => {
 
-        const [loginUser, {error}] = useMutation(LOGIN_USER);
-
         event.preventDefault();
+
+        
+
+        
 
         // check if form has everything (as per react-bootstrap docs)
         const form = event.currentTarget;
@@ -37,14 +41,18 @@ const LoginForm = () => {
 
         try {
 
-            const response = await loginUser(userFormData);
+            const {data} = await loginUser({
+                
+                variables: {...userFormData}
+            });
 
-        if (!response.ok) {
+        const { token, user } = data.login;
+        if(user.savedBooks){
 
-            throw new Error('something went wrong!');
+            const savedBookIds = user.savedBooks.map((book) => book.bookId);
+            localStorage.setItem('saved_books', savedBookIds);
         }
-
-        const { token, user } = await response.json();
+        
         console.log(user);
         Auth.login(token);
 
