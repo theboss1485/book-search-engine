@@ -91,7 +91,7 @@ const SavedBooks = () => {
                                     <p className='small'>Authors: {book.authors}</p>
                                     <Card.Text>{book.description}</Card.Text>
                                     <div className="d-flex flex-column justify-content-center">
-                                        <a className="btn-block btn-success mb-3 google-books-link" href={book.link}>
+                                        <a className="btn-block btn-success mb-3 google-books-link" href={book.link} target="_blank">
                                                 View on Google Books
                                         </a>
                                         <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
