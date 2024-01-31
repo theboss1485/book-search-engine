@@ -13,8 +13,7 @@ import Auth from '../utils/auth';
 import {searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 import { SAVE_BOOK } from '../utils/mutations';
-
-import { viewBookOnGoogleBooks } from '../utils/viewBookOnGoogleBooks';
+import {Link} from 'react-router-dom';
 
 const SearchBooks = () => {
 
@@ -150,9 +149,9 @@ const SearchBooks = () => {
                                             <p className='small'>Authors: {book.authors}</p>
                                         <Card.Text>{book.description}</Card.Text>
                                         <div className="d-flex flex-column justify-content-center">
-                                            <Button className="btn-block btn-success mb-3"onClick={() => viewBookOnGoogleBooks(book.link)}>
+                                            <a className="btn-block btn-success mb-3 google-books-link" href={book.link}>
                                                 View on Google Books
-                                            </Button>
+                                            </a>
                                             {Auth.loggedIn() && (
                                                 <Button
                                                     disabled={savedBookIds?.some((savedBookId) => savedBookId === book.bookId)}

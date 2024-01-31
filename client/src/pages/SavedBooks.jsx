@@ -14,23 +14,25 @@ import {REMOVE_BOOK} from '../utils/mutations.js'
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
-import { viewBookOnGoogleBooks } from '../utils/viewBookOnGoogleBooks';
+import {Link} from 'react-router-dom';
 
 const SavedBooks = () => {
 
     const {loading, data} = useQuery(GET_ME);
     const [removeBook, {error}] = useMutation(REMOVE_BOOK);
 
-    //const userDataLength = Object.keys(data).length;
-
     const [userData, setUserData] = useState();
 
-    useEffect(() => {
+    if (loading) {
 
-        if(data){
-            setUserData(data.me)
-        }
-    }, [data])
+        // Here, we render the loading state if the data from the GET_ME query hasn't arrived yet
+        return <p>Loading...</p>;
+
+    } else if(data && !userData){
+
+        setUserData(data.me);
+    }
+
 
     // This is a function that accepts the book's mongo _id value as param and deletes the book from the database
     const handleDeleteBook = async (bookId) => {
@@ -89,9 +91,9 @@ const SavedBooks = () => {
                                     <p className='small'>Authors: {book.authors}</p>
                                     <Card.Text>{book.description}</Card.Text>
                                     <div className="d-flex flex-column justify-content-center">
-                                        <Button className="btn-block btn-success mb-3"onClick={() => viewBookOnGoogleBooks(book.link)}>
+                                        <a className="btn-block btn-success mb-3 google-books-link" href={book.link}>
                                                 View on Google Books
-                                        </Button>
+                                        </a>
                                         <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
                                             Delete this Book!
                                         </Button>
