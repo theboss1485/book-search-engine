@@ -83,7 +83,7 @@ const SavedBooks = () => {
                 <Row>
                     {userData.savedBooks.map((book) => {
                         return (
-                        <Col key={book.bookId} md="4">
+                        <Col key={book.bookId} md="4" className="pb-3">
                             <Card border='dark'>
                                 {book.image ? <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' /> : null}
                                 <Card.Body>
