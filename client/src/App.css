@@ -20,6 +20,11 @@ h6 {
     font-style: italic;
 }
 
+.google-books-link{
+    
+    text-align: center;
+}
+
 .max-width{
     max-width: 100%;
 }

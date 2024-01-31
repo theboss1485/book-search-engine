@@ -18,16 +18,16 @@ const typeDefs = `
 
         bookId: String!
         authors: [String!]
-        description: String
-        title: String
+        description: String!
+        title: String!
         image: String
         link: String
     }
 
     type User {
         _id: ID
-        username: String
-        email: String
+        username: String!
+        email: String!
         bookCount: Int
         savedBooks: [Book]
     }
