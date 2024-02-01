@@ -47,7 +47,7 @@ const LoginForm = () => {
         if(user.savedBooks){
 
             const savedBookIds = user.savedBooks.map((book) => book.bookId);
-            localStorage.setItem('saved_books', savedBookIds);
+            localStorage.setItem('saved_books', JSON.stringify(savedBookIds));
         }
         
         Auth.login(token);
